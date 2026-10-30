@@ -1,0 +1,58 @@
+# ============================================================
+# heavy_machinery_dab — Declarative Automation Bundle
+# ------------------------------------------------------------
+# Single source of truth for the entire Heavy Machinery
+# Lakehouse pipeline (sim -> bronze -> silver -> gold).
+#
+# Deployment model (branch -> target):
+#   stage branch -> `databricks bundle deploy -t stage` -> /Workspace/.../stage + [stage] jobs
+#   main  branch -> `databricks bundle deploy -t prod`  -> /Workspace/.../prod  + [prod] jobs
+#
+# Code is ONE copy (bronze/silver/gold/helper/sim notebooks).
+# Only config_setup.ipynb differs per BRANCH:
+#   stage branch = stage config (main.bronze/silver/gold schemas)
+#   main  branch = prod config  (*_prod schemas)
+# Deploy from the stage branch with -t stage, from main with -t prod.
+# ============================================================
+
+bundle:
+  name: heavy_machinery_dab
+
+include:
+  - resources/*.yml
+
+variables:
+  env:
+    description: Environment name (stage | prod) — used in job name suffixes
+
+targets:
+  stage:
+    default: true
+    mode: production
+    workspace:
+      root_path: /Workspace/Users/shiralkedar2024@gmail.com/stage
+    variables:
+      env: stage
+    sync:
+      include:
+        - bronze/*
+        - silver/*
+        - gold/*
+        - helper/*
+        - sim/*
+        - config_setup.ipynb
+
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Users/shiralkedar2024@gmail.com/prod
+    variables:
+      env: prod
+    sync:
+      include:
+        - bronze/*
+        - silver/*
+        - gold/*
+        - helper/*
+        - sim/*
+        - config_setup.ipynb

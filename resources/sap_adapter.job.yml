@@ -1,0 +1,23 @@
+# SAP source simulator
+# audit_start -> sim_02_sap -> audit_end
+resources:
+  jobs:
+    sap_adapter:
+      name: "2_sap_adapter [${var.env}]"
+      parameters:
+        - name: job_name
+          default: "2_sap_adapter_${var.env}"
+      tasks:
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+        - task_key: sap_adapter
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../sim/sim_02_sap.ipynb
+        - task_key: audit_end
+          depends_on:
+            - task_key: sap_adapter
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb

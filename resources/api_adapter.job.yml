@@ -1,0 +1,23 @@
+# REST API source simulator
+# audit_start -> sim_06_api -> audit_end
+resources:
+  jobs:
+    api_adapter:
+      name: "6_api_adapter [${var.env}]"
+      parameters:
+        - name: job_name
+          default: "6_api_adapter_${var.env}"
+      tasks:
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+        - task_key: api_adapter
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../sim/sim_06_api.ipynb
+        - task_key: audit_end
+          depends_on:
+            - task_key: api_adapter
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb

@@ -1,0 +1,71 @@
+# Gold dimensional model + KPIs
+# dims (parallel) -> facts -> KPIs -> mart -> audit_end
+resources:
+  jobs:
+    gold_layer_job:
+      name: "gold_layer_job [${var.env}]"
+      parameters:
+        - name: job_name
+          default: "gold_layer_job_${var.env}"
+      tasks:
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+        - task_key: gold_01
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../gold/gold_01_dim_static.ipynb
+        - task_key: gold_02
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../gold/gold_02_dim_machine.ipynb
+        - task_key: gold_03
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../gold/gold_03_dim_business.ipynb
+        - task_key: gold_04
+          depends_on:
+            - task_key: gold_01
+            - task_key: gold_02
+            - task_key: gold_03
+          notebook_task:
+            notebook_path: ../gold/gold_04_fact_telemetry.ipynb
+        - task_key: gold_05
+          depends_on:
+            - task_key: gold_01
+            - task_key: gold_02
+            - task_key: gold_03
+          notebook_task:
+            notebook_path: ../gold/gold_05_fact_ops.ipynb
+        - task_key: gold_06
+          depends_on:
+            - task_key: gold_04
+            - task_key: gold_05
+          notebook_task:
+            notebook_path: ../gold/gold_06_kpi_reliability.ipynb
+        - task_key: gold_07
+          depends_on:
+            - task_key: gold_04
+          notebook_task:
+            notebook_path: ../gold/gold_07_kpi_efficiency.ipynb
+        - task_key: gold_08
+          depends_on:
+            - task_key: gold_04
+            - task_key: gold_05
+          notebook_task:
+            notebook_path: ../gold/gold_08_kpi_predictive.ipynb
+        - task_key: gold_09
+          depends_on:
+            - task_key: gold_06
+            - task_key: gold_07
+          notebook_task:
+            notebook_path: ../gold/gold_09_mart_summary.ipynb
+        - task_key: audit_end
+          depends_on:
+            - task_key: gold_08
+            - task_key: gold_09
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb

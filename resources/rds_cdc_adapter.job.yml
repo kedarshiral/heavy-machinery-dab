@@ -1,0 +1,23 @@
+# RDS CDC source simulator
+# audit_start -> sim_01_rds_cdc -> audit_end
+resources:
+  jobs:
+    rds_cdc_adapter:
+      name: "1_rds_cdc_adapter [${var.env}]"
+      parameters:
+        - name: job_name
+          default: "1_rds_cdc_adapter_${var.env}"
+      tasks:
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+        - task_key: rds_cdc_adapter
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../sim/sim_01_rds_cdc.ipynb
+        - task_key: audit_end
+          depends_on:
+            - task_key: rds_cdc_adapter
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb

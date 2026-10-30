@@ -1,0 +1,8 @@
+# Leftover env-config reference copies from scaffolding (not part of
+# the bundle; live config is config_setup.ipynb per branch).
+# Safe to delete these two files manually anytime.
+config_stage.ipynb
+config_prod.ipynb
+
+# Databricks bundle internal state
+.bundle/
