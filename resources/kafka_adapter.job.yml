@@ -1,0 +1,23 @@
+# Kafka source simulator
+# audit_start -> sim_05_kafka -> audit_end
+resources:
+  jobs:
+    kafka_adapter:
+      name: "5_kafka_adapter [${var.env}]"
+      parameters:
+        - name: job_name
+          default: "5_kafka_adapter_${var.env}"
+      tasks:
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+        - task_key: kafka_adapter
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../sim/sim_05_kafka.ipynb
+        - task_key: audit_end
+          depends_on:
+            - task_key: kafka_adapter
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb

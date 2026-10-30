@@ -1,0 +1,72 @@
+# Silver standardization layer
+# audit_start -> silver_01..09 (dependency graph) -> audit_end
+resources:
+  jobs:
+    silver_layer_job:
+      name: "silver_layer_job [${var.env}]"
+      parameters:
+        - name: job_name
+          default: "silver_layer_job_${var.env}"
+      schedule:
+        quartz_cron_expression: "0 0 * * * ?"
+        timezone_id: Asia/Calcutta
+        pause_status: PAUSED
+      tasks:
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+        - task_key: silver_01_machine
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../silver/silver_01_machine_master.ipynb
+        - task_key: silver_02_site
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../silver/silver_02_site.ipynb
+        - task_key: silver_03_reference_data
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../silver/silver_03_reference_data.ipynb
+        - task_key: silver_04_work_order
+          depends_on:
+            - task_key: silver_01_machine
+          notebook_task:
+            notebook_path: ../silver/silver_04_work_order.ipynb
+        - task_key: silver_05_maintenance
+          depends_on:
+            - task_key: silver_01_machine
+          notebook_task:
+            notebook_path: ../silver/silver_05_maintenance.ipynb
+        - task_key: silver_06_telemetry
+          depends_on:
+            - task_key: silver_01_machine
+          notebook_task:
+            notebook_path: ../silver/silver_06_telemetry.ipynb
+        - task_key: silver_07_sap
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../silver/silver_07_sap.ipynb
+        - task_key: silver_08_site_standardized
+          depends_on:
+            - task_key: silver_02_site
+          notebook_task:
+            notebook_path: ../silver/silver_08_site_standardized.ipynb
+        - task_key: silver_09_ba_feedback_loop
+          depends_on:
+            - task_key: silver_08_site_standardized
+          notebook_task:
+            notebook_path: ../silver/silver_09_ba_feedback_loop.ipynb
+        - task_key: audit_end
+          depends_on:
+            - task_key: silver_03_reference_data
+            - task_key: silver_04_work_order
+            - task_key: silver_05_maintenance
+            - task_key: silver_06_telemetry
+            - task_key: silver_07_sap
+            - task_key: silver_09_ba_feedback_loop
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb

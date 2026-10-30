@@ -1,0 +1,36 @@
+# Orchestrator: bronze -> silver -> gold -> dashboard email
+# run_job tasks reference the bundle's own layer jobs by key,
+# so the [stage] super job runs [stage] layer jobs and the
+# [prod] super job runs [prod] layer jobs automatically.
+resources:
+  jobs:
+    super_telemetry_job:
+      name: "jd_prod_telemetry_super_job [${var.env}]"
+      parameters:
+        - name: job_name
+          default: "jd_prod_telemetry_super_job_${var.env}"
+      tasks:
+        - task_key: bronze
+          run_job_task:
+            job_id: ${resources.jobs.bronze_layer_job.id}
+        - task_key: silver
+          depends_on:
+            - task_key: bronze
+          run_job_task:
+            job_id: ${resources.jobs.silver_layer_job.id}
+        - task_key: gold
+          depends_on:
+            - task_key: silver
+          run_job_task:
+            job_id: ${resources.jobs.gold_layer_job.id}
+        - task_key: Machine_Report
+          depends_on:
+            - task_key: gold
+          dashboard_task:
+            dashboard_id: 01f1d4711e26128ca04407ecce2cf86f
+            warehouse_id: 096bb0eb7c8772bb
+            subscription:
+              subscribers:
+                - user_name: shiralkedar2024@gmail.com
+              attachment:
+                page_attachment: {}

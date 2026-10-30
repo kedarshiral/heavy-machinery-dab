@@ -1,0 +1,6 @@
+# NOTE: Adapter + seed jobs are now defined in one-job-per-file YAMLs
+# (strict mode requires a single job per .job.yml file):
+#   initial_seed.job.yml, rds_cdc_adapter.job.yml, sap_adapter.job.yml,
+#   telemetry_adapter.job.yml, gps_adapter.job.yml, kafka_adapter.job.yml,
+#   api_adapter.job.yml
+# This file intentionally defines no resources.

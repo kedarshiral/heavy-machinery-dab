@@ -1,0 +1,59 @@
+# Bronze ingestion layer
+# audit_start -> bronze_01..07 (parallel) -> audit_end
+resources:
+  jobs:
+    bronze_layer_job:
+      name: "broze_layer_job [${var.env}]"
+      parameters:
+        - name: job_name
+          default: "broze_layer_job_${var.env}"
+      tasks:
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+        - task_key: bronze_01
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../bronze/bronze_01_rds_cdc.ipynb
+        - task_key: bronze_02
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../bronze/bronze_02_sap.ipynb
+        - task_key: bronze_03
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../bronze/bronze_03_telemetry.ipynb
+        - task_key: bronze_04
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../bronze/bronze_04_gps.ipynb
+        - task_key: bronze_05
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../bronze/bronze_05_kafka.ipynb
+        - task_key: bronze_06
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../bronze/bronze_06_api.ipynb
+        - task_key: bronze_07
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../bronze/bronze_07_ba_standardization.ipynb
+        - task_key: audit_end
+          depends_on:
+            - task_key: bronze_01
+            - task_key: bronze_02
+            - task_key: bronze_03
+            - task_key: bronze_04
+            - task_key: bronze_05
+            - task_key: bronze_06
+            - task_key: bronze_07
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb
