@@ -6,6 +6,10 @@ resources:
   jobs:
     super_telemetry_job:
       name: "jd_prod_telemetry_super_job [${var.env}]"
+      schedule:
+        quartz_cron_expression: "0 0/30 * * * ?" # Har 30 minute mein
+        timezone_id: "UTC"
+        pause_status: "UNPAUSED"
       parameters:
         - name: job_name
           default: "jd_prod_telemetry_super_job_${var.env}"
