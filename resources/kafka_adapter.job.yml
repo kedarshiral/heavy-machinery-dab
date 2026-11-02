@@ -4,6 +4,10 @@ resources:
   jobs:
     kafka_adapter:
       name: "5_kafka_adapter [${var.env}]"
+      schedule:
+        quartz_cron_expression: "0 1/2 * * * ?"
+        timezone_id: "UTC"
+        pause_status: "UNPAUSED"
       parameters:
         - name: job_name
           default: "5_kafka_adapter_${var.env}"

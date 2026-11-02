@@ -1,23 +1,59 @@
-# SAP source simulator
-# audit_start -> sim_02_sap -> audit_end
 resources:
   jobs:
-    sap_adapter:
-      name: "2_sap_adapter [${var.env}]"
+    # ==========================================
+    # JOB 1: SAP INCREMENTAL (Har 15 min)
+    # ==========================================
+    sap_incremental_job:
+      name: "SAP_Incremental_[${var.env}]"
+      schedule:
+        quartz_cron_expression: "0 0/15 * * * ?"
+        timezone_id: "UTC"
+        pause_status: "UNPAUSED"
       parameters:
         - name: job_name
-          default: "2_sap_adapter_${var.env}"
+          default: "SAP_Incremental_${var.env}"
       tasks:
         - task_key: audit_start
           notebook_task:
             notebook_path: ../helper/audit_start.ipynb
-        - task_key: sap_adapter
+        - task_key: run_sap_inc
           depends_on:
             - task_key: audit_start
           notebook_task:
             notebook_path: ../sim/sim_02_sap.ipynb
+            base_parameters:
+              run_mode: "incremental"   # 👈 Parameter Pass
         - task_key: audit_end
           depends_on:
-            - task_key: sap_adapter
+            - task_key: run_sap_inc
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb
+
+    # ==========================================
+    # JOB 2: SAP SNAPSHOT (Daily 1:30 AM)
+    # ==========================================
+    sap_snapshot_job:
+      name: "SAP_Snapshot_[${var.env}]"
+      schedule:
+        quartz_cron_expression: "0 30 1 * * ?"
+        timezone_id: "UTC"
+        pause_status: "UNPAUSED"
+      parameters:
+        - name: job_name
+          default: "SAP_Snapshot_${var.env}"
+      tasks:
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+        - task_key: run_sap_snap
+          depends_on:
+            - task_key: audit_start
+          notebook_task:
+            notebook_path: ../sim/sim_02_sap.ipynb
+            base_parameters:
+              run_mode: "snapshot"      # 👈 Parameter Pass
+        - task_key: audit_end
+          depends_on:
+            - task_key: run_sap_snap
           notebook_task:
             notebook_path: ../helper/audit_end.ipynb
