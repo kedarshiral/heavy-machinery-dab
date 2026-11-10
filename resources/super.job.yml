@@ -1,36 +1,69 @@
-# Orchestrator: bronze -> silver -> gold -> dashboard email
-# run_job tasks reference the bundle's own layer jobs by key,
-# so the [stage] super job runs [stage] layer jobs and the
-# [prod] super job runs [prod] layer jobs automatically.
 resources:
   jobs:
     super_telemetry_job:
       name: "jd_prod_telemetry_super_job [${var.env}]"
+      schedule:
+        quartz_cron_expression: "0 0/30 * * * ?"
+        timezone_id: "UTC"
+        pause_status: "PAUSED"
+      max_concurrent_runs: 1  # ⭐ Agar pehla run slow hai toh naya trigger nahi hoga
       parameters:
         - name: job_name
           default: "jd_prod_telemetry_super_job_${var.env}"
+      
+      # ⭐ Fail hua toh Alert aayega
+      email_notifications:
+        on_failure:
+          - "shiralkedar2024@gmail.com"
+          
       tasks:
+        # 1. AUDIT START (Sabse pehle chlega)
+        - task_key: audit_start
+          notebook_task:
+            notebook_path: ../helper/audit_start.ipynb
+            base_parameters:
+              job_name: "telemetry_super_job_${var.env}"
+              job_type: "ORCHESTRATOR"
+
+        # 2. BRONZE LAYER
         - task_key: bronze
+          depends_on:
+            - task_key: audit_start
           run_job_task:
             job_id: ${resources.jobs.bronze_layer_job.id}
+
+        # 3. SILVER LAYER
         - task_key: silver
           depends_on:
             - task_key: bronze
           run_job_task:
             job_id: ${resources.jobs.silver_layer_job.id}
+
+        # 4. GOLD LAYER
         - task_key: gold
           depends_on:
             - task_key: silver
           run_job_task:
             job_id: ${resources.jobs.gold_layer_job.id}
+
+        # 5. DASHBOARD / REPORT (Fail hone par bhi aage badhega)
         - task_key: Machine_Report
           depends_on:
             - task_key: gold
+          run_if: ALL_DONE # ⭐ Agar gold fail ho jaye par dashboard subscription chalana hai
           dashboard_task:
-            dashboard_id: 01f1d4711e26128ca04407ecce2cf86f
-            warehouse_id: 096bb0eb7c8772bb
+            dashboard_id: "01f1d4711e26128ca04407ecce2cf86f"
+            warehouse_id: "096bb0eb7c8772bb"
             subscription:
               subscribers:
-                - user_name: shiralkedar2024@gmail.com
+                - user_name: "shiralkedar2024@gmail.com"
               attachment:
                 page_attachment: {}
+
+        # 6. AUDIT END (Sabse aakhir mein chlega)
+        - task_key: audit_end
+          depends_on:
+            - task_key: Machine_Report
+          run_if: ALL_DONE
+          notebook_task:
+            notebook_path: ../helper/audit_end.ipynb

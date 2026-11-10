@@ -4,6 +4,10 @@ resources:
   jobs:
     gps_adapter:
       name: "4_gps_adapter [${var.env}]"
+      schedule:
+        quartz_cron_expression: "0 0/30 * * * ?"
+        timezone_id: "UTC"
+        pause_status: "PAUSED"
       parameters:
         - name: job_name
           default: "4_gps_adapter_${var.env}"

@@ -4,6 +4,10 @@ resources:
   jobs:
     api_adapter:
       name: "6_api_adapter [${var.env}]"
+      schedule:
+        quartz_cron_expression: "0 5/30 * * * ?"
+        timezone_id: "UTC"
+        pause_status: "PAUSED"
       parameters:
         - name: job_name
           default: "6_api_adapter_${var.env}"

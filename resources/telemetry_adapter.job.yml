@@ -4,6 +4,10 @@ resources:
   jobs:
     telemetry_adapter:
       name: "3_telemetry_adapter [${var.env}]"
+      schedule:
+        quartz_cron_expression: "0 1/2 * * * ?"
+        timezone_id: "UTC"
+        pause_status: "PAUSED"
       parameters:
         - name: job_name
           default: "3_telemetry_adapter_${var.env}"
