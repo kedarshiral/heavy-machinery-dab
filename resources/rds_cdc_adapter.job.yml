@@ -7,7 +7,7 @@ resources:
       schedule:
         quartz_cron_expression: "0 0/2 * * * ?"
         timezone_id: "UTC"
-        pause_status: "UNPAUSED"
+        pause_status: "PAUSED"
       parameters:
         - name: job_name
           default: "1_rds_cdc_adapter_${var.env}"
