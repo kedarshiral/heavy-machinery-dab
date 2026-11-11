@@ -1,0 +1,1603 @@
+{
+  "datasets": [
+    {
+      "name": "dim_machine",
+      "displayName": "Machine Dimension",
+      "config": {
+        "source": "main.gold.dim_machine",
+        "measures": [
+          {
+            "name": "machine_count",
+            "expr": "COUNT(1)"
+          },
+          {
+            "name": "total_book_value",
+            "expr": "SUM(book_value)"
+          }
+        ],
+        "filter": "__CURRENT = true",
+        "version": "1.1",
+        "dimensions": [
+          {
+            "name": "machine_sk",
+            "expr": "machine_sk"
+          },
+          {
+            "name": "machine_id",
+            "expr": "machine_id"
+          },
+          {
+            "name": "model_id",
+            "expr": "model_id"
+          },
+          {
+            "name": "owner_id",
+            "expr": "owner_id"
+          },
+          {
+            "name": "site_id",
+            "expr": "site_id"
+          },
+          {
+            "name": "status",
+            "expr": "status"
+          },
+          {
+            "name": "asset_class",
+            "expr": "asset_class"
+          },
+          {
+            "name": "manufacture_year",
+            "expr": "manufacture_year"
+          },
+          {
+            "name": "has_sap_asset",
+            "expr": "has_sap_asset"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dim_date",
+      "displayName": "Date Dimension",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.dim_date",
+        "dimensions": [
+          {
+            "name": "date_sk",
+            "expr": "date_sk"
+          },
+          {
+            "name": "full_date",
+            "expr": "full_date"
+          },
+          {
+            "name": "year",
+            "expr": "year"
+          },
+          {
+            "name": "quarter",
+            "expr": "quarter"
+          },
+          {
+            "name": "month",
+            "expr": "month"
+          },
+          {
+            "name": "day_name",
+            "expr": "day_name"
+          },
+          {
+            "name": "is_weekend",
+            "expr": "is_weekend"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dim_operator",
+      "displayName": "Operator Dimension",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.dim_operator",
+        "dimensions": [
+          {
+            "name": "operator_id",
+            "expr": "operator_id"
+          },
+          {
+            "name": "operator_name",
+            "expr": "operator_name"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dim_location",
+      "displayName": "Location Dimension",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.dim_location",
+        "dimensions": [
+          {
+            "name": "location_sk",
+            "expr": "location_sk"
+          },
+          {
+            "name": "std_city",
+            "expr": "std_city"
+          },
+          {
+            "name": "std_state",
+            "expr": "std_state"
+          },
+          {
+            "name": "std_country",
+            "expr": "std_country"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dim_site",
+      "displayName": "Site Dimension",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.dim_site",
+        "dimensions": [
+          {
+            "name": "site_id",
+            "expr": "site_id"
+          },
+          {
+            "name": "site_name",
+            "expr": "site_name"
+          },
+          {
+            "name": "geo_lat",
+            "expr": "geo_lat"
+          },
+          {
+            "name": "geo_lon",
+            "expr": "geo_lon"
+          },
+          {
+            "name": "location_sk",
+            "expr": "location_sk"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dim_owner",
+      "displayName": "Owner Dimension",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.dim_owner",
+        "dimensions": [
+          {
+            "name": "owner_id",
+            "expr": "owner_id"
+          },
+          {
+            "name": "owner_name",
+            "expr": "owner_name"
+          }
+        ]
+      }
+    },
+    {
+      "name": "fact_utilization_daily",
+      "displayName": "Daily Utilization Facts",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.fact_utilization_daily",
+        "dimensions": [
+          {
+            "name": "machine_sk",
+            "expr": "machine_sk"
+          },
+          {
+            "name": "date_sk",
+            "expr": "date_sk"
+          }
+        ],
+        "measures": [
+          {
+            "name": "active_hours",
+            "expr": "SUM(active_hours)"
+          },
+          {
+            "name": "idle_hours",
+            "expr": "SUM(idle_hours)"
+          },
+          {
+            "name": "avg_utilization_pct",
+            "expr": "AVG(utilization_pct)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "fact_telemetry_30min",
+      "displayName": "Telemetry Facts (30-min)",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.fact_telemetry_30min",
+        "dimensions": [
+          {
+            "name": "machine_sk",
+            "expr": "machine_sk"
+          },
+          {
+            "name": "date_sk",
+            "expr": "date_sk"
+          },
+          {
+            "name": "time_bucket_sk",
+            "expr": "time_bucket_sk"
+          },
+          {
+            "name": "time_bucket_30m",
+            "expr": "time_bucket_30m"
+          }
+        ],
+        "measures": [
+          {
+            "name": "avg_temp",
+            "expr": "AVG(avg_temp)"
+          },
+          {
+            "name": "max_temp",
+            "expr": "MAX(max_temp)"
+          },
+          {
+            "name": "avg_press",
+            "expr": "AVG(avg_press)"
+          },
+          {
+            "name": "avg_fuel",
+            "expr": "AVG(avg_fuel)"
+          },
+          {
+            "name": "avg_rpm",
+            "expr": "AVG(avg_rpm)"
+          },
+          {
+            "name": "total_readings",
+            "expr": "SUM(readings)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "dim_time_30min",
+      "displayName": "Time Bucket Dimension (30 min)",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.dim_time_30min",
+        "dimensions": [
+          {
+            "name": "time_bucket_sk",
+            "expr": "time_bucket_sk"
+          },
+          {
+            "name": "time_start",
+            "expr": "time_start"
+          },
+          {
+            "name": "time_end",
+            "expr": "time_end"
+          }
+        ]
+      }
+    },
+    {
+      "name": "fact_fault_event",
+      "displayName": "Fault Event Facts",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.fact_fault_event",
+        "dimensions": [
+          {
+            "name": "machine_sk",
+            "expr": "machine_sk"
+          },
+          {
+            "name": "date_sk",
+            "expr": "date_sk"
+          },
+          {
+            "name": "severity",
+            "expr": "severity"
+          },
+          {
+            "name": "fault_ts",
+            "expr": "fault_ts"
+          }
+        ],
+        "measures": [
+          {
+            "name": "fault_count",
+            "expr": "COUNT(1)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "fact_maintenance_event",
+      "displayName": "Maintenance Event Facts",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.fact_maintenance_event",
+        "dimensions": [
+          {
+            "name": "machine_sk",
+            "expr": "machine_sk"
+          },
+          {
+            "name": "date_sk",
+            "expr": "date_sk"
+          },
+          {
+            "name": "maint_type",
+            "expr": "maint_type"
+          }
+        ],
+        "measures": [
+          {
+            "name": "maint_count",
+            "expr": "COUNT(1)"
+          },
+          {
+            "name": "total_maint_cost",
+            "expr": "SUM(maint_cost)"
+          },
+          {
+            "name": "avg_days_since_maint",
+            "expr": "AVG(days_since_last_maintenance)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "kpi_maintenance_urgency",
+      "displayName": "Maintenance Urgency KPI",
+      "config": {
+        "version": "1.1",
+        "source": "main.gold.kpi_maintenance_urgency",
+        "dimensions": [
+          {
+            "name": "machine_sk",
+            "expr": "machine_sk"
+          }
+        ],
+        "measures": [
+          {
+            "name": "overheat_events",
+            "expr": "SUM(overheat_count)"
+          },
+          {
+            "name": "avg_days_since_maint",
+            "expr": "AVG(days_since_maint)"
+          },
+          {
+            "name": "avg_util",
+            "expr": "AVG(avg_util)"
+          },
+          {
+            "name": "avg_urgency_score",
+            "expr": "AVG(urgency_score)"
+          },
+          {
+            "name": "max_urgency_score",
+            "expr": "MAX(urgency_score)"
+          }
+        ]
+      }
+    }
+  ],
+  "relationshipGraphs": [
+    {
+      "sources": [
+        {
+          "name": "Machine_Dimension",
+          "datasetName": "dim_machine"
+        },
+        {
+          "name": "Date_Dimension",
+          "datasetName": "dim_date"
+        },
+        {
+          "name": "Operator_Dimension",
+          "datasetName": "dim_operator"
+        },
+        {
+          "name": "Location_Dimension",
+          "datasetName": "dim_location"
+        },
+        {
+          "name": "Site_Dimension",
+          "datasetName": "dim_site"
+        },
+        {
+          "name": "Owner_Dimension",
+          "datasetName": "dim_owner"
+        },
+        {
+          "name": "Daily_Utilization_Facts",
+          "datasetName": "fact_utilization_daily"
+        },
+        {
+          "name": "Telemetry_Facts_30min",
+          "datasetName": "fact_telemetry_30min"
+        },
+        {
+          "name": "Time_Bucket_Dimension_30_min",
+          "datasetName": "dim_time_30min"
+        },
+        {
+          "name": "Fault_Event_Facts",
+          "datasetName": "fact_fault_event"
+        },
+        {
+          "name": "Maintenance_Event_Facts",
+          "datasetName": "fact_maintenance_event"
+        },
+        {
+          "name": "Maintenance_Urgency_KPI",
+          "datasetName": "kpi_maintenance_urgency"
+        }
+      ],
+      "relationships": [
+        {
+          "name": "relationship_0",
+          "from": "Telemetry_Facts_30min",
+          "to": "Machine_Dimension",
+          "on": "`Telemetry_Facts_30min`.`machine_sk` = `Machine_Dimension`.`machine_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_2",
+          "from": "Telemetry_Facts_30min",
+          "to": "Time_Bucket_Dimension_30_min",
+          "on": "`Telemetry_Facts_30min`.`time_bucket_sk` = `Time_Bucket_Dimension_30_min`.`time_bucket_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_3",
+          "from": "Fault_Event_Facts",
+          "to": "Machine_Dimension",
+          "on": "`Fault_Event_Facts`.`machine_sk` = `Machine_Dimension`.`machine_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_4",
+          "from": "Fault_Event_Facts",
+          "to": "Date_Dimension",
+          "on": "`Fault_Event_Facts`.`date_sk` = `Date_Dimension`.`date_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_5",
+          "from": "Daily_Utilization_Facts",
+          "to": "Machine_Dimension",
+          "on": "`Daily_Utilization_Facts`.`machine_sk` = `Machine_Dimension`.`machine_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_6",
+          "from": "Daily_Utilization_Facts",
+          "to": "Date_Dimension",
+          "on": "`Daily_Utilization_Facts`.`date_sk` = `Date_Dimension`.`date_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_7",
+          "from": "Maintenance_Event_Facts",
+          "to": "Machine_Dimension",
+          "on": "`Maintenance_Event_Facts`.`machine_sk` = `Machine_Dimension`.`machine_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_8",
+          "from": "Maintenance_Event_Facts",
+          "to": "Date_Dimension",
+          "on": "`Maintenance_Event_Facts`.`date_sk` = `Date_Dimension`.`date_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_9",
+          "from": "Maintenance_Urgency_KPI",
+          "to": "Machine_Dimension",
+          "on": "`Maintenance_Urgency_KPI`.`machine_sk` = `Machine_Dimension`.`machine_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_10",
+          "from": "Machine_Dimension",
+          "to": "Site_Dimension",
+          "on": "`Machine_Dimension`.`site_id` = `Site_Dimension`.`site_id`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_11",
+          "from": "Machine_Dimension",
+          "to": "Owner_Dimension",
+          "on": "`Machine_Dimension`.`owner_id` = `Owner_Dimension`.`owner_id`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_12",
+          "from": "Site_Dimension",
+          "to": "Location_Dimension",
+          "on": "`Site_Dimension`.`location_sk` = `Location_Dimension`.`location_sk`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_13",
+          "from": "Telemetry_Facts_30min",
+          "to": "Date_Dimension",
+          "on": "`Telemetry_Facts_30min`.`date_sk` = TO_DATE(CAST(`Date_Dimension`.`date_sk` AS STRING), 'yyyyMMdd')",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "2d7ff25a",
+      "displayName": "Telemetry Heavy Machine Report",
+      "layout": [
+        {
+          "widget": {
+            "name": "kpi_machines",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "measure(Machine_Dimension__machine_count)",
+                      "expression": "MEASURE(`Machine_Dimension`.`machine_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Active Machines"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(Machine_Dimension__machine_count)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_faults",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "measure(Fault_Event_Facts__fault_count)",
+                      "expression": "MEASURE(`Fault_Event_Facts`.`fault_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fault Events"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(Fault_Event_Facts__fault_count)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_avg_util",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "measure(Daily_Utilization_Facts__avg_utilization_pct)",
+                      "expression": "MEASURE(`Daily_Utilization_Facts`.`avg_utilization_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Utilization %"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(Daily_Utilization_Facts__avg_utilization_pct)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_maint_cost",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "measure(Maintenance_Event_Facts__total_maint_cost)",
+                      "expression": "MEASURE(`Maintenance_Event_Facts`.`total_maint_cost`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Maintenance Cost"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(Maintenance_Event_Facts__total_maint_cost)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_readings",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "measure(Telemetry_Facts_30min__total_readings)",
+                      "expression": "MEASURE(`Telemetry_Facts_30min`.`total_readings`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Telemetry Readings"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(Telemetry_Facts_30min__total_readings)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_operators",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "count(Operator_Dimension__operator_id)",
+                      "expression": "COUNT(`Operator_Dimension`.`operator_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Operators"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(Operator_Dimension__operator_id)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 10,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "line_temp_trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Date_Dimension__full_date",
+                      "expression": "`Date_Dimension`.`full_date`"
+                    },
+                    {
+                      "name": "measure(Telemetry_Facts_30min__avg_temp)",
+                      "expression": "MEASURE(`Telemetry_Facts_30min`.`avg_temp`)"
+                    },
+                    {
+                      "name": "measure(Telemetry_Facts_30min__max_temp)",
+                      "expression": "MEASURE(`Telemetry_Facts_30min`.`max_temp`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Engine Temperature Trend (Daily)"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "Date_Dimension__full_date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "measure(Telemetry_Facts_30min__avg_temp)",
+                      "displayName": "Avg Temp"
+                    },
+                    {
+                      "fieldName": "measure(Telemetry_Facts_30min__max_temp)",
+                      "displayName": "Max Temp"
+                    }
+                  ],
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 1,
+                      "type": "exact"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 8,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "pie_fleet_status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "measure(Machine_Dimension__machine_count)",
+                      "expression": "MEASURE(`Machine_Dimension`.`machine_count`)"
+                    },
+                    {
+                      "name": "Machine_Dimension__status",
+                      "expression": "`Machine_Dimension`.`status`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fleet by Status"
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "measure(Machine_Dimension__machine_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "Machine_Dimension__status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 2,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_faults_severity",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Fault_Event_Facts__severity",
+                      "expression": "`Fault_Event_Facts`.`severity`"
+                    },
+                    {
+                      "name": "measure(Fault_Event_Facts__fault_count)",
+                      "expression": "MEASURE(`Fault_Event_Facts`.`fault_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fault Events by Severity"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Fault_Event_Facts__severity",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Fault_Event_Facts__fault_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_maint_cost_type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Maintenance_Event_Facts__maint_type",
+                      "expression": "`Maintenance_Event_Facts`.`maint_type`"
+                    },
+                    {
+                      "name": "measure(Maintenance_Event_Facts__total_maint_cost)",
+                      "expression": "MEASURE(`Maintenance_Event_Facts`.`total_maint_cost`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Maintenance Cost by Type"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Maintenance_Event_Facts__maint_type",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Maintenance_Event_Facts__total_maint_cost)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 7,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_fleet_asset_class",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Machine_Dimension__asset_class",
+                      "expression": "`Machine_Dimension`.`asset_class`"
+                    },
+                    {
+                      "name": "measure(Machine_Dimension__machine_count)",
+                      "expression": "MEASURE(`Machine_Dimension`.`machine_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Fleet by Asset Class"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Machine_Dimension__asset_class",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Machine_Dimension__machine_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 7,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "line_active_idle",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Date_Dimension__full_date",
+                      "expression": "`Date_Dimension`.`full_date`"
+                    },
+                    {
+                      "name": "measure(Daily_Utilization_Facts__active_hours)",
+                      "expression": "MEASURE(`Daily_Utilization_Facts`.`active_hours`)"
+                    },
+                    {
+                      "name": "measure(Daily_Utilization_Facts__idle_hours)",
+                      "expression": "MEASURE(`Daily_Utilization_Facts`.`idle_hours`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Active vs Idle Hours (Daily)"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "Date_Dimension__full_date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "measure(Daily_Utilization_Facts__active_hours)",
+                      "displayName": "Active Hours"
+                    },
+                    {
+                      "fieldName": "measure(Daily_Utilization_Facts__idle_hours)",
+                      "displayName": "Idle Hours"
+                    }
+                  ],
+                  "format": {
+                    "abbreviation": "compact",
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_top_urgency",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Machine_Dimension__machine_id",
+                      "expression": "`Machine_Dimension`.`machine_id`"
+                    },
+                    {
+                      "name": "measure(Maintenance_Urgency_KPI__avg_urgency_score)",
+                      "expression": "MEASURE(`Maintenance_Urgency_KPI`.`avg_urgency_score`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Top 10 Machines by Urgency Score"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Machine_Dimension__machine_id",
+                  "scale": {
+                    "categorySize": {
+                      "number": 10,
+                      "type": "number-of-categories"
+                    },
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Maintenance_Urgency_KPI__avg_urgency_score)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "exact"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 12,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "line_temp_timeofday",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Time_Bucket_Dimension_30_min__time_start",
+                      "expression": "`Time_Bucket_Dimension_30_min`.`time_start`"
+                    },
+                    {
+                      "name": "measure(Telemetry_Facts_30min__avg_temp)",
+                      "expression": "MEASURE(`Telemetry_Facts_30min`.`avg_temp`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Avg Engine Temp by Time of Day"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "Time_Bucket_Dimension_30_min__time_start",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Telemetry_Facts_30min__avg_temp)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 1,
+                      "type": "exact"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 17,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_fleet_owner",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Owner_Dimension__owner_name",
+                      "expression": "`Owner_Dimension`.`owner_name`"
+                    },
+                    {
+                      "name": "measure(Machine_Dimension__machine_count)",
+                      "expression": "MEASURE(`Machine_Dimension`.`machine_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Machines by Owner"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Owner_Dimension__owner_name",
+                  "scale": {
+                    "categorySize": {
+                      "number": 10,
+                      "type": "number-of-categories"
+                    },
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Machine_Dimension__machine_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 17,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_machines_country",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Location_Dimension__std_country",
+                      "expression": "`Location_Dimension`.`std_country`"
+                    },
+                    {
+                      "name": "measure(Machine_Dimension__machine_count)",
+                      "expression": "MEASURE(`Machine_Dimension`.`machine_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Machines by Country"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Location_Dimension__std_country",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Machine_Dimension__machine_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 17,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "table_urgency_ranking",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Machine_Dimension__machine_id",
+                      "expression": "`Machine_Dimension`.`machine_id`"
+                    },
+                    {
+                      "name": "Machine_Dimension__status",
+                      "expression": "`Machine_Dimension`.`status`"
+                    },
+                    {
+                      "name": "Site_Dimension__site_name",
+                      "expression": "`Site_Dimension`.`site_name`"
+                    },
+                    {
+                      "name": "Location_Dimension__std_country",
+                      "expression": "`Location_Dimension`.`std_country`"
+                    },
+                    {
+                      "name": "Owner_Dimension__owner_name",
+                      "expression": "`Owner_Dimension`.`owner_name`"
+                    },
+                    {
+                      "name": "measure(Maintenance_Urgency_KPI__avg_urgency_score)",
+                      "expression": "MEASURE(`Maintenance_Urgency_KPI`.`avg_urgency_score`)"
+                    },
+                    {
+                      "name": "measure(Maintenance_Urgency_KPI__overheat_events)",
+                      "expression": "MEASURE(`Maintenance_Urgency_KPI`.`overheat_events`)"
+                    },
+                    {
+                      "name": "measure(Maintenance_Urgency_KPI__avg_days_since_maint)",
+                      "expression": "MEASURE(`Maintenance_Urgency_KPI`.`avg_days_since_maint`)"
+                    },
+                    {
+                      "name": "measure(Maintenance_Urgency_KPI__avg_util)",
+                      "expression": "MEASURE(`Maintenance_Urgency_KPI`.`avg_util`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "MEASURE(`Maintenance_Urgency_KPI`.`avg_urgency_score`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Maintenance Urgency Ranking",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "Machine_Dimension__machine_id",
+                    "headerTooltip": "Machine ID"
+                  },
+                  {
+                    "fieldName": "Machine_Dimension__status"
+                  },
+                  {
+                    "fieldName": "Site_Dimension__site_name"
+                  },
+                  {
+                    "fieldName": "Location_Dimension__std_country"
+                  },
+                  {
+                    "fieldName": "Owner_Dimension__owner_name"
+                  },
+                  {
+                    "fieldName": "measure(Maintenance_Urgency_KPI__avg_urgency_score)",
+                    "format": {
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "places": 2,
+                        "type": "exact"
+                      },
+                      "type": "number-plain"
+                    }
+                  },
+                  {
+                    "fieldName": "measure(Maintenance_Urgency_KPI__overheat_events)"
+                  },
+                  {
+                    "fieldName": "measure(Maintenance_Urgency_KPI__avg_days_since_maint)",
+                    "format": {
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "places": 1,
+                        "type": "exact"
+                      },
+                      "type": "number-plain"
+                    }
+                  },
+                  {
+                    "fieldName": "measure(Maintenance_Urgency_KPI__avg_util)",
+                    "format": {
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "places": 1,
+                        "type": "exact"
+                      },
+                      "type": "number-plain"
+                    }
+                  }
+                ],
+                "rowOrder": [
+                  {
+                    "by": "column-reversed",
+                    "field": {
+                      "index": 5
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 22,
+            "width": 12,
+            "height": 7
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#EBEBEB",
+        "dark": "#10161C"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FCFCFD",
+        "dark": "#1A2229"
+      },
+      "widgetBorderColor": {
+        "light": "#FCFCFD",
+        "dark": "#1A2229"
+      },
+      "visualizationColors": [
+        "#15AFDD",
+        "#2375A8",
+        "#52A870",
+        "#C85070",
+        "#C89930",
+        "#7B6CC1",
+        "#4FA3A5",
+        "#D97A34"
+      ],
+      "widgetHeaderAlignment": "LEFT",
+      "fontSettings": {
+        "base": {
+          "fontFamily": "Inter",
+          "fontSize": 13
+        }
+      }
+    },
+    "applyModeEnabled": false
+  }
+}
