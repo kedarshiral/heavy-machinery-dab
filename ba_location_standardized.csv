@@ -1,0 +1,27 @@
+raw_city,raw_country,std_city,std_state,std_country,confidence
+Banglore,India,Bengaluru,Karnataka,IN,0.94
+Bangalore,India,Bengaluru,Karnataka,IN,0.96
+Banglore,Ind,Bengaluru,Karnataka,IN,0.88
+Bangalore,IND,Bengaluru,Karnataka,IN,0.92
+Bombay,India,Mumbai,Maharashtra,IN,0.98
+Mumbai,India,Mumbai,Maharashtra,IN,1.00
+Mumbai,IND,Mumbai,Maharashtra,IN,0.99
+Delhi NCR,India,New Delhi,Delhi,IN,0.88
+New Delhi,India,New Delhi,Delhi,IN,1.00
+Delhi,India,New Delhi,Delhi,IN,0.85
+Houston,USA,Houston,Texas,US,1.00
+Houston,US,Houston,Texas,US,1.00
+Chicago,USA,Chicago,Illinois,US,1.00
+Chicago,US,Chicago,Illinois,US,1.00
+Munich,Germany,Munich,Bavaria,DE,1.00
+Munich,DE,Munich,Bavaria,DE,1.00
+Muenchen,Germany,Munich,Bavaria,DE,0.91
+Sao Paulo,Brazil,Sao Paulo,SP,BR,1.00
+Sao Paulo,BR,Sao Paulo,SP,BR,1.00
+São Paulo,Brazil,Sao Paulo,SP,BR,0.95
+Perth,Australia,Perth,WA,AU,1.00
+Perth,AU,Perth,WA,AU,1.00
+Johannesburg,South Africa,Johannesburg,Gauteng,ZA,1.00
+Johannesburg,ZA,Johannesburg,Gauteng,ZA,1.00
+Berlin,Germany,Berlin,Berlin,DE,1.00
+Berlin,DE,Berlin,Berlin,DE,1.00
