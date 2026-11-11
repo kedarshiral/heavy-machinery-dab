@@ -1,0 +1,127 @@
+{
+  "rds_cdc": {
+    "source_path": "/Volumes/main/heavy_machinery/landing/rds/*/*.json",
+    "target_table": "bronze.rds_cdc",
+    "format": "json",
+    "checkpoint": "/Volumes/main/heavy_machinery/landing/_checkpoints/rds_cdc",
+    "schema_hints": "op STRING, _change_type STRING, _commit_ts STRING, _lsn LONG, table STRING, before STRING, after STRING",
+    "dq_rules": {
+      "critical": [
+        {"name": "valid_lsn", "condition": "_lsn IS NOT NULL"},
+        {"name": "valid_change_type", "condition": "_change_type IS NOT NULL"},
+        {"name": "valid_table", "condition": "table IS NOT NULL"}
+      ],
+      "warn": [
+        {"name": "valid_op", "condition": "op IN ('C','U','D')"}
+      ]
+    },
+    "partition_by": "table"
+  },
+
+  "sap_incremental": {
+    "source_path": "/Volumes/main/heavy_machinery/landing/sap/incremental/*/",
+    "target_table": "bronze.sap_incremental",
+    "format": "parquet",
+    "checkpoint": "/Volumes/main/heavy_machinery/landing/_checkpoints/sap_incremental",
+    "schema_hints": "asset_id STRING, machine_id STRING, book_value DOUBLE, last_modified_ts STRING",
+    "dq_rules": {
+      "critical": [
+        {"name": "valid_asset_id", "condition": "asset_id IS NOT NULL"},
+        {"name": "valid_machine_id", "condition": "machine_id IS NOT NULL"}
+      ],
+      "warn": [
+        {"name": "positive_book_value", "condition": "book_value > 0"}
+      ]
+    }
+  },
+
+  "telemetry": {
+    "source_path": "/Volumes/main/heavy_machinery/landing/telemetry/*/",
+    "target_table": "bronze.telemetry",
+    "format": "json",
+    "checkpoint": "/Volumes/main/heavy_machinery/landing/_checkpoints/telemetry",
+    "schema_hints": "event_id STRING, machine_id STRING, sensor_ts STRING, engine_temp DOUBLE, hydraulic_press DOUBLE, fuel_level DOUBLE, rpm LONG",
+    "dq_rules": {
+      "critical": [
+        {"name": "valid_machine_id", "condition": "machine_id IS NOT NULL"},
+        {"name": "valid_event_id", "condition": "event_id IS NOT NULL"}
+      ],
+      "warn": [
+        {"name": "engine_temp_range", "condition": "engine_temp BETWEEN 0 AND 200"},
+        {"name": "hydraulic_range", "condition": "hydraulic_press BETWEEN 0 AND 500"}
+      ]
+    }
+  },
+
+  "gps": {
+    "source_path": "/Volumes/main/heavy_machinery/landing/gps/*/",
+    "target_table": "bronze.gps",
+    "format": "csv",
+    "checkpoint": "/Volumes/main/heavy_machinery/landing/_checkpoints/gps",
+    "schema_hints": "ping_id STRING, machine_id STRING, site_id STRING, ping_ts STRING, lat DOUBLE, lon DOUBLE, speed DOUBLE",
+    "csv_options": {"header": "true", "inferSchema": "true"},
+    "dq_rules": {
+      "critical": [
+        {"name": "valid_ping_id", "condition": "ping_id IS NOT NULL"},
+        {"name": "valid_machine_id", "condition": "machine_id IS NOT NULL"}
+      ],
+      "warn": [
+        {"name": "valid_lat", "condition": "lat BETWEEN -90 AND 90"},
+        {"name": "valid_lon", "condition": "lon BETWEEN -180 AND 180"}
+      ]
+    }
+  },
+
+  "kafka": {
+    "source_path": "/Volumes/main/heavy_machinery/landing/kafka/live_sensor_stream/",
+    "target_table": "bronze.kafka_stream",
+    "format": "json",
+    "checkpoint": "/Volumes/main/heavy_machinery/landing/_checkpoints/kafka",
+    "schema_hints": "stream_event_id STRING, machine_id STRING, sensor_ts STRING, payload_json STRING, schema_version LONG",
+    "dq_rules": {
+      "critical": [
+        {"name": "valid_stream_id", "condition": "stream_event_id IS NOT NULL"},
+        {"name": "valid_machine_id", "condition": "machine_id IS NOT NULL"}
+      ],
+      "warn": [
+        {"name": "valid_payload", "condition": "payload_json IS NOT NULL AND length(payload_json) > 0"}
+      ]
+    }
+  },
+
+  "api": {
+    "source_path": "/Volumes/main/heavy_machinery/landing/api/*/",
+    "target_table": "bronze.api",
+    "format": "json",
+    "checkpoint": "/Volumes/main/heavy_machinery/landing/_checkpoints/api",
+    "schema_hints": "weather_id STRING, site_id STRING, obs_ts STRING, temp_c DOUBLE, humidity LONG, wind_kph DOUBLE, condition STRING",
+    "dq_rules": {
+      "critical": [
+        {"name": "valid_site_id", "condition": "site_id IS NOT NULL"}
+      ],
+      "warn": [
+        {"name": "temp_range", "condition": "temp_c BETWEEN -50 AND 60"},
+        {"name": "humidity_range", "condition": "humidity BETWEEN 0 AND 100"}
+      ]
+    }
+  },
+
+  "ba_standardization": {
+    "source_path": "/Volumes/main/heavy_machinery/landing/ba/",
+    "target_table": "bronze.ba_location_standardized",
+    "format": "csv",
+    "checkpoint": "/Volumes/main/heavy_machinery/landing/_checkpoints/ba",
+    "schema_hints": "raw_city STRING, raw_country STRING, std_city STRING, std_state STRING, std_country STRING, confidence DOUBLE",
+    "csv_options": {"header": "true", "inferSchema": "true"},
+    "dq_rules": {
+      "critical": [
+        {"name": "valid_raw_city", "condition": "raw_city IS NOT NULL"},
+        {"name": "valid_std_city", "condition": "std_city IS NOT NULL"},
+        {"name": "valid_confidence", "condition": "confidence BETWEEN 0 AND 1"}
+      ],
+      "warn": [
+        {"name": "high_confidence", "condition": "confidence >= 0.7"}
+      ]
+    }
+  }
+}
